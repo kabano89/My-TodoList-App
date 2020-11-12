@@ -28,6 +28,8 @@ const TodoForm = (props) => {
     }
     const handleFormSubmit = e => {
         e.preventDefault();
+        if(values.activity === '') return
+        //console.log(values.activity)
         props.addOrEdit(values);
     }
 
