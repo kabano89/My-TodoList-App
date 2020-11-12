@@ -11,6 +11,7 @@ const Todos = () => {
     //retrieve records
     useEffect(() => {
         firebaseDb.child('todos').on('value', snapshot => {
+            //console.log(snapshot.val())
             if(snapshot.val() != null)
                 setTodoObjects({
                     ...snapshot.val()
@@ -63,10 +64,12 @@ const Todos = () => {
            .then(function(snapshot){
                 let completed = snapshot.child(`${key}/completed`).val();
                 if(completed === false){
+                    
                     firebaseDb.child(`todos/${key}`).update(
                          {completed: true}
                     ) 
                 }else{
+                    
                     firebaseDb.child(`todos/${key}`).update(
                         {completed: false}
                     )
@@ -76,17 +79,13 @@ const Todos = () => {
             
     }
     
-    
-     
-    
-     const getStyle = () => {
-        return {
-            if(){
-               //textDecoration: 'line-through'
-               //color:'red'
-            }
-                     
+     const getStyle = (todoDone) => {
+         if(todoDone){
+             return{ 
+                textDecoration: 'line-through'
+             }   
         }
+        
      }
 
    
@@ -111,10 +110,11 @@ const Todos = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {
+                            {   
                                 Object.keys(todoObjects).map(id => {
+                                    const checked = todoObjects[id].completed
                                     return <tr key={id}>
-                                        <td style={getStyle()}> <input type="checkbox" onChange={() => {displayMessage(id)}}/>  {todoObjects[id].activity}</td>
+                                        <td style={getStyle(checked)}> <input type="checkbox" onChange={() => {displayMessage(id)}}/>  {todoObjects[id].activity}</td>
                                         <td>
                                             <a className="btn text-primary" onClick={()=> {setCurrentId(id)}}>
                                                  <i className="fas fa-pencil-alt"></i>
